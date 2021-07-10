@@ -1,29 +1,57 @@
 import { useState } from 'react'
-
+import { FiTrash, FiCheckSquare } from 'react-icons/fi'
 import '../styles/tasklist.scss'
 
-import { FiTrash, FiCheckSquare } from 'react-icons/fi'
-
 interface Task {
-  id: number;
-  title: string;
-  isComplete: boolean;
+  id: number
+  title: string
+  isComplete: boolean
 }
 
 export function TaskList() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [currentId, setCurrentId] = useState(1)
+  const [error, setError] = useState('')
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [newTaskTitle, setNewTaskTitle] = useState('')
 
   function handleCreateNewTask() {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+    setError('')
+
+    if (!newTaskTitle) {
+      setError('É obrigatório informar uma tarefa')
+      return
+    }
+
+    setTasks([ ...tasks, {
+      id: currentId,
+      title: newTaskTitle,
+      isComplete: false
+    }])
+
+    setNewTaskTitle('')
+    setCurrentId(currentId + 1)
   }
 
   function handleToggleTaskCompletion(id: number) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+
+    const newTasks: Task[] = tasks.map((item) => {
+      if (item.id === id) {
+        item.isComplete = !item.isComplete
+      }
+
+      return item
+    })
+
+    setTasks(newTasks)
   }
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
+
+    const newTasks: Task[] = tasks.filter(item => item.id !== id)
+    setTasks(newTasks)
   }
 
   return (
@@ -31,16 +59,19 @@ export function TaskList() {
       <header>
         <h2>Minhas tasks</h2>
 
-        <div className="input-group">
-          <input 
-            type="text" 
-            placeholder="Adicionar novo todo" 
-            onChange={(e) => setNewTaskTitle(e.target.value)}
-            value={newTaskTitle}
-          />
-          <button type="submit" data-testid="add-task-button" onClick={handleCreateNewTask}>
-            <FiCheckSquare size={16} color="#fff"/>
-          </button>
+        <div>
+          <div className="input-group">
+            <input 
+              type="text" 
+              placeholder="Adicionar novo todo" 
+              onChange={(e) => setNewTaskTitle(e.target.value)}
+              value={newTaskTitle}
+            />
+            <button type="submit" data-testid="add-task-button" onClick={handleCreateNewTask}>
+              <FiCheckSquare size={16} color="#fff"/>
+            </button>
+          </div>
+          {error && <span className="has-error">{error}</span>}
         </div>
       </header>
 
