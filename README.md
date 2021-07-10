@@ -1,4 +1,12 @@
-# to.do 💙
+# to.do 📝
+
+This is the first challenge of the Rocketseat Ignite course.
+
+In this challenge, we had to develop the following tasks:
+
+- Add new task
+- Mark a task complete
+- Remove a task
 
 <p align="center">
   <a><img src="./screenshots/todo-list.png" alt="Todo list"></a>
