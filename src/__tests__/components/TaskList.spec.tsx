@@ -46,6 +46,10 @@ describe('App Page', () => {
     fireEvent.click(addTaskButton);
 
     expect(screen.queryByTestId('task')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error-add-task')).toBeInTheDocument();
+
+    const errorAddTask = screen.getByTestId('error-add-task');
+    expect(errorAddTask).toHaveTextContent('É obrigatório informar um todo');
 
     const taskInput = screen.getByPlaceholderText('Adicionar novo todo');
 
@@ -60,6 +64,7 @@ describe('App Page', () => {
     const addedFirstTaskTitle = screen.getByText('Desafio ReactJS Ignite');
 
     expect(addedFirstTaskTitle).toHaveTextContent('Desafio ReactJS Ignite');
+    expect(screen.queryByTestId('error-add-task')).not.toBeInTheDocument();
   })
 
   it('should be able to remove a task', async () => {
